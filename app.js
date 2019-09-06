@@ -1,7 +1,10 @@
-const http = require('http');
-const express = require('express');
+const express = require('express')
+const app = express()
+require('dotenv').config();
+const cors = require('cors');
 const PORT = process.env.PORT || 3000;
-const app = express();
+
+app.use(cors());
 
 const server = app.listen(PORT, () => console.log(`Now listening on port ${PORT}!`));
 const io = require('socket.io')(server);
