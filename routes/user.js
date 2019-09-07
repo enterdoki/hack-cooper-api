@@ -5,11 +5,40 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 user.use(bodyParser.json());
 
+const Group = require('../database/models/group')
 const User = require('../database/models/user')
 
-user.get('/', (req, res, next) => {
-    res.status(200).send("Hi, this is the user route.");
+user.get('/', async(req, res, next) => {
+    try {
+        const users = await User.findAll();
+        if(users) {
+            res.status(200).send(users)
+        } else {
+            res.status(400).send("No users")
+        }
+    } catch(err) {
+        res.status(400).send(err);
+    }
 })
+
+user.get('/:id', async(req, res, next) => {
+    try {
+        const users = await User.findOne({
+            where: {id:req.params.id, include: [{
+                model: Group
+              }]}
+            
+        });
+        if(users) {
+            res.status(200).send(users)
+        } else {
+            res.status(400).send("No users")
+        }
+    } catch(err) {
+        res.status(400).send(err);
+    }
+})
+
 
 user.post('/login', async(req, res, next) => {
     try {
