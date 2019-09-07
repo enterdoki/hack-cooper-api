@@ -20,6 +20,22 @@ user.get('/', async(req, res, next) => {
     }
 })
 
+user.get('/:id', async(req, res, next) => {
+    try {
+        const users = await User.findOne({
+            where: {id:req.params.id}
+        });
+        if(users) {
+            res.status(200).send(users)
+        } else {
+            res.status(400).send("No users")
+        }
+    } catch(err) {
+        res.status(400).send(err);
+    }
+})
+
+
 user.post('/login', async(req, res, next) => {
     try {
         const user = await User.findOne({ where: { username:req.body.username } });
