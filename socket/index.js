@@ -3,7 +3,7 @@ module.exports = (io) => {
     io.on('connection', (socket) => {
         console.log('a user connected');
         
-        socket.on('join', async (user, room) =>{
+        socket.on('join', () =>{
          //   let room = roomHandler.addRoom(room);
             socket.broadcast.emit('new', {description: "new user connected"});
         });
