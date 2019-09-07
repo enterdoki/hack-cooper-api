@@ -12,15 +12,21 @@ user.get('/', (req, res, next) => {
 })
 
 user.post('/login', async(req, res, next) => {
-    const user = await User.findOne({ where: { username:req.body.username } });
-    if (bcrypt.compareSync(req.body.password, user.password)) {
-        let payload = { id: user.id };
-        let token = jwt.sign(payload, 'wyaapp');
-        res.status(200).send({ user, token });
+    try {
+        const user = await User.findOne({ where: { username:req.body.username } });
+    if(user) {
+        if (bcrypt.compareSync(req.body.password, user.password)) {
+            let payload = { id: user.id };
+            let token = jwt.sign(payload, 'wyaapp');
+            res.status(200).send({ user, token });
+        }
     }
     else {
-        res.status(400).send('Password is incorrect');
+        res.status(400).send('Username does not exist or Password is incorrect.');
       }
+    } catch(err) {
+        res.status(400).send(err);
+    }
 
 })
 
