@@ -1,17 +1,19 @@
-require('dotenv').config();
-const express = require('express')
-const app = express()
+require('dotenv').config();  
+const express  = require("express");
 const cors = require('cors');
-const port = process.env.PORT || 3000;
-const person = require('./routes/user')
-const db = require('./database/db')
-app.use(cors());
-app.use('/user', person);
+const soc = express();
+const server = require("http").createServer(soc);
+const io = require("socket.io").listen(server);
+const port = process.env.PORT || 4000;
+const user = require('./routes/user')
 
-app.get('/', (req, res, next) =>{
-    res.status(200).send('This is the default API.')
-}) 
+soc.use(cors());
+soc.use('/user', user)
 
-// db.sync({force:true});
+io.on("connection", socket => {
+    socket.on("chat message", msg =>{
+        socket.emit("chat message", msg)
+    })
+})
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+server.listen(port, () => console.log('sever is running on port...'+port));
