@@ -1,19 +1,11 @@
-const roomHandler = require('./roomHandler');
-module.exports = (io) => {
-    io.on('connection', (socket) => {
-        console.log('a user connected');
-        
-        socket.on('join', () =>{
-         //   let room = roomHandler.addRoom(room);
-            socket.broadcast.emit('new', {description: "new user connected"});
-        });
+const express  = require("express");
+const soc = express;
+const server = require("http").createServer(soc);
+const io = require("socket.io").listen(server);
+const port = 3000;
 
-        socket.on('disconnect', () => {
-            console.log('user disconnected');
-        });
+io.on("connection", socket => {
+    console.log('connected user/////');
+})
 
-        socket.on('room', function (data) {
-            socket.join(data.room);
-        });
-    });
-}
+server.listen(port, () => console.log('sever is running on port...'+port));
