@@ -1,13 +1,8 @@
 const Sequelize = require('sequelize');
 const db = require('../db');
-<<<<<<< HEAD
 const bcrypt = require('bcrypt');
 
 const User = db.define("users", {
-=======
-
-const User = db.define("user", {
->>>>>>> a3565d5eb70ba05bb4edb9ec2b455b78f0dc1925
     firstname: {
         type: Sequelize.STRING,
         allowNull: false,
