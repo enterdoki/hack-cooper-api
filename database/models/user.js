@@ -1,8 +1,13 @@
 const Sequelize = require('sequelize');
 const db = require('../db');
+<<<<<<< HEAD
 const bcrypt = require('bcrypt');
 
 const User = db.define("users", {
+=======
+
+const User = db.define("user", {
+>>>>>>> a3565d5eb70ba05bb4edb9ec2b455b78f0dc1925
     firstname: {
         type: Sequelize.STRING,
         allowNull: false,
@@ -22,7 +27,11 @@ const User = db.define("users", {
             msg: "Username already taken."
         }
     },
+<<<<<<< HEAD
     password : {
+=======
+    password: {
+>>>>>>> a3565d5eb70ba05bb4edb9ec2b455b78f0dc1925
         type: Sequelize.STRING,
         allowNull: false,
         required:true,
@@ -31,6 +40,7 @@ const User = db.define("users", {
 },{
     timestamps:false
 });
+<<<<<<< HEAD
 
 User.generateHash = function(password) {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
@@ -41,4 +51,7 @@ User.prototype.validPassword = function(password) {
 }
 
 
+=======
+  
+>>>>>>> a3565d5eb70ba05bb4edb9ec2b455b78f0dc1925
 module.exports = User;
