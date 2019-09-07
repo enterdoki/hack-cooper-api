@@ -14,16 +14,16 @@ user.get('/', (req, res, next) => {
 user.post('/login', async(req, res, next) => {
     try {
         const user = await User.findOne({ where: { username:req.body.username } });
-    if(user) {
-        if (bcrypt.compareSync(req.body.password, user.password)) {
-            let payload = { id: user.id };
-            let token = jwt.sign(payload, 'wyaapp');
-            res.status(200).send({ user, token });
+        if(user) {
+            if (bcrypt.compareSync(req.body.password, user.password)) {
+                let payload = { id: user.id };
+                let token = jwt.sign(payload, 'wyaapp');
+                res.status(200).send({ user, token });
+            }
         }
-    }
-    else {
-        res.status(400).send('Username does not exist or Password is incorrect.');
-      }
+        else {
+            res.status(400).send('Username does not exist or Password is incorrect.');
+        }
     } catch(err) {
         res.status(400).send(err);
     }
