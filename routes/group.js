@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser')
 const group = express.Router();
 const Group = require('../database/models/Group')
+const User = require('.../database/models/User')
 
 group.use(bodyParser.json());
 
@@ -32,6 +33,26 @@ group.post('/', async(req, res, next) => {
     }
 })
 
-
+group.put('/', async(req, res, next) => {
+    try {
+        if(req.body.groupid)
+        {
+            const group = await Group.findOne({ where: { id:req.body.groupid} });
+            if(req.body.userid)
+            {
+                const user = await User.findOne({ where: {id:req.body.userid}});
+                if(user)
+                {
+                    group.addUser(user);
+                    res.status(200).send("Successful")
+                }
+                else  res.status(400).send("Duplicate event."); 
+            }
+            else res.status(400).send("Duplicate event.");
+        }
+    } catch(err) {
+        res.status(400).send(err);
+    }
+})
 
 module.exports= group;

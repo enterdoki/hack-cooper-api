@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 user.use(bodyParser.json());
 
+const Group = require('../database/models/group')
 const User = require('../database/models/user')
 
 user.get('/', async(req, res, next) => {
@@ -23,7 +24,10 @@ user.get('/', async(req, res, next) => {
 user.get('/:id', async(req, res, next) => {
     try {
         const users = await User.findOne({
-            where: {id:req.params.id}
+            where: {id:req.params.id, include: [{
+                model: Group
+              }]}
+            
         });
         if(users) {
             res.status(200).send(users)
