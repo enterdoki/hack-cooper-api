@@ -1,8 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser')
 const group = express.Router();
-const Group = require('../database/models/Group')
-const User = require('.../database/models/User')
+const Group = require('../database/models/group')
+const User = require('../database/models/user')
 
 group.use(bodyParser.json());
 
@@ -23,7 +23,11 @@ group.post('/', async(req, res, next) => {
     try {
         const group = await Group.findOne({ where: { eventname:req.body.eventname} });
         if(!group) {
-            const new_group = await Group.create(req.body);
+            const new_group = await Group.create({
+                eventname:req.body.eventname,
+                location:req.body.location,
+                friends:req.body.friends+ ':' + req.body.place
+            });
             res.status(200).send(new_group);
         } else {
             res.status(400).send("Duplicate event.");
@@ -33,23 +37,21 @@ group.post('/', async(req, res, next) => {
     }
 })
 
-group.put('/', async(req, res, next) => {
+group.put('/:id', async(req, res, next) => {
     try {
-        if(req.body.groupid)
-        {
-            const group = await Group.findOne({ where: { id:req.body.groupid} });
-            if(req.body.userid)
-            {
-                const user = await User.findOne({ where: {id:req.body.userid}});
-                if(user)
-                {
-                    group.addUser(user);
-                    res.status(200).send("Successful")
-                }
-                else  res.status(400).send("Duplicate event."); 
-            }
-            else res.status(400).send("Duplicate event.");
-        }
+       const group = await Group.findOne({
+           where: {id:req.params.id}
+       })
+       if(group) {
+           await Group.update({
+               
+            friends:group.friends + ',' + req.body.friends + ':' + req.body.place},
+               {where: {id:req.params.id}
+           })
+           res.status(200).send("Added")
+       } else {
+           res.status(400).send("Not found.")
+       }
     } catch(err) {
         res.status(400).send(err);
     }

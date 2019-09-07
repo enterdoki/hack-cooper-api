@@ -11,6 +11,12 @@ const Groups = db.define("groups", {
         type: Sequelize.STRING,
         allowNull: false,
         required: true
+    },
+    friends: {
+        type:Sequelize.STRING
+    },
+    place: {
+        type:Sequelize.STRING
     }
 }, {
         timestamps: false
